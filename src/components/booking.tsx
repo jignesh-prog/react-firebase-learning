@@ -93,23 +93,35 @@ const logOut = async () => {
         <Stack spacing={2} sx={{width:'70%',padding:'15px'}}>
             <TextField  
             label='Email' 
-            {...register('email',
+            {...register('Email',
+          
             {pattern:{
                 value:/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-            message: 'invalid email'}})} 
-            required 
+                
+            message: 'invalid email',
+           }})} 
+            
             onChange={(e) => setEmail(e.target.value)}
           error={Boolean(errors.Email)}
           helperText= {errors.Email?.message?.toString()}
-           
+
             > </TextField >
         </Stack>
         <Stack sx={{width:'70%',padding:'15px'}}>
-        <TextField  label='Address' {...register('Address',{required:'address required'})}   onChange={(e) => setAdd(e.target.value)}></TextField >
+        <TextField  label='Address'
+         error={Boolean(errors.Address)}
+         helperText= {errors.Address?.message?.toString()} {...register('Address',
+         {required:'address required'})}   onChange={(e) => setAdd(e.target.value)}></TextField >
         </Stack>
         <Stack sx={{width:'70%',padding:'15px'}}>
-        <TextField  label='ContactNo' {...register('ContactNo',{required:'number required'
-            })}  onChange={(e) => setContactNo(e.target.value)}></TextField >
+        <TextField  label='ContactNo' 
+      error={Boolean(errors.ContactNo)}
+      helperText= {errors.ContactNo?.message?.toString()}
+        {...register('ContactNo',{
+            pattern :{value:/^[+]?(\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+            message:'number required'
+           
+}})}  onChange={(e) => setContactNo(e.target.value)}></TextField >
         </Stack>
         </Box>
        
