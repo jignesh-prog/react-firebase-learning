@@ -13,7 +13,7 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from '../config/firebase'
-import { createUserWithEmailAndPassword, signOut, signInWithRedirect } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { useState, useEffect, useRef } from 'react'
 
 export const Login = () => {
@@ -37,20 +37,13 @@ export const Login = () => {
     }
     const signInWithGoogle = async () => {
         try {
-            await signInWithRedirect(auth, googleProvider)
+            await signInWithPopup(auth, googleProvider)
         }
         catch (err) {
             console.error(err)
         }
     }
-    const logOut = async () => {
-        try {
-            await signOut(auth)
-        }
-        catch (err) {
-            console.error(err)
-        }
-    }
+  
     const navigate = useNavigate()
 
     return (
@@ -93,7 +86,7 @@ export const Login = () => {
                                 <Stack sx={{dispaly:'block',justifyContent:'space-between'}}>
                                 <Button variant='contained' sx={{margin:'5px'}} onClick={signIn}>Sign in</Button>
                                 <Button variant='contained' color='secondary' sx={{margin:'5px',}} onClick={signInWithGoogle}>SignWithGoogle</Button>
-                                <Button variant='contained' color='warning'  sx={{margin:'5px',}} onClick={logOut}>Logout</Button>
+                                
                                 </Stack>
                           
                         </Stack>
