@@ -38,6 +38,7 @@ export const Login = () => {
     const signInWithGoogle = async () => {
         try {
             await signInWithPopup(auth, googleProvider)
+            navigate('booking')
         }
         catch (err) {
             console.error(err)
@@ -85,7 +86,7 @@ export const Login = () => {
                                 </Stack> 
                                 <Stack sx={{dispaly:'block',justifyContent:'space-between'}}>
                                 <Button variant='contained' sx={{margin:'5px'}} onClick={signIn}>Sign in</Button>
-                                <Button variant='contained' color='secondary' sx={{margin:'5px',}} onClick={signInWithGoogle}>SignWithGoogle</Button>
+                                <Button variant='contained' color='secondary' sx={{margin:'5px',}} onClick={signInWithGoogle}>SignInWithGoogle</Button>
                                 
                                 </Stack>
                           

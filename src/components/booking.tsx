@@ -3,10 +3,11 @@ import { Box, Button, Checkbox, Paper, Stack, TextField, Typography, } from '@mu
 import { useEffect, useState } from 'react'
 import { DevTool } from '@hookform/devtools'
 import { signOut } from 'firebase/auth'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { Timestamp, addDoc, collection, getDocs } from 'firebase/firestore'
 import { useForm } from 'react-hook-form'
 import { auth, db } from '../config/firebase'
 import { Outlet, useNavigate } from 'react-router-dom'
+import {BasicDateTimePicker} from './datepick'
 
 export const Booking = () => {
     const [select, setSelect] = useState<any>([])
@@ -16,6 +17,8 @@ export const Booking = () => {
     const [add, setAdd] = useState<any>('')
     const [mahapuja, setMahapuja] = useState<any>(false)
     const [padhramni,setPadhramni] = useState<any>(false)
+    const [dateAndTime] = useState<any | Timestamp>('')
+
     const form = useForm();
 
     const { register, control, handleSubmit, formState } = form
@@ -46,7 +49,8 @@ export const Booking = () => {
         navigate('/confirmation');
         try {
             await addDoc(bookingCollectionRef, {
-                Name: name, Address: add, ContactNo: contactNo, Mahapuja: mahapuja, Email: email,Padhramni: padhramni
+                Name: name, Address: add, ContactNo: contactNo, Mahapuja: mahapuja,
+                 Email: email,Padhramni: padhramni, DateAndTime:dateAndTime
             });
         }
         catch (err) {
@@ -92,8 +96,11 @@ export const Booking = () => {
                                         {
                                             pattern: {
                                                 value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-
-                                                message: 'invalid email',
+                                                message: 'invalid email'},
+                                                required:{
+                                                    value:true,
+                                                    message:'field is required'
+                                                
                                             }
                                         })}
 
@@ -109,17 +116,26 @@ export const Booking = () => {
                                     helperText={errors.Address?.message?.toString()} {...register('Address',
                                         { required: 'address required' })} onChange={(e) => setAdd(e.target.value)}></TextField >
                             </Stack>
-                            <Stack sx={{ width: '70%', padding: '15px' }}>
+                            <Stack sx={{ width: '70%' }}>
                                 <TextField label='ContactNo'
                                     error={Boolean(errors.ContactNo)}
                                     helperText={errors.ContactNo?.message?.toString()}
                                     {...register('ContactNo', {
                                         pattern: {
                                             value: /^[+]?(\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{3}$/,
-                                            message: 'number required'
-                                        }
+                                            message: 'invalid number'
+                                        }, required:{
+                                            value:true,
+                                            message:'field is required'
+                                        
+                                    }
                                     })} onChange={(e) => setContactNo(e.target.value)}></TextField >
                             </Stack>
+                             <Stack sx={{ width: '70%', padding: '15px' }}>
+                                
+                                <BasicDateTimePicker
+                               />
+                            </Stack> 
                         </Box>
                         </Stack>
                         <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', padding: '10px', justifyContent: 'center' }}>
