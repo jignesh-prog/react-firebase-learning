@@ -12,14 +12,15 @@ import {
 } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider } from '../config/firebase'
-import { signInWithEmailAndPassword, signInWithPopup} from 'firebase/auth'
+import { auth} from '../config/firebase'
+import { createUserWithEmailAndPassword} from 'firebase/auth'
 import { useState, useEffect, useRef } from 'react'
-import GoogleButton from 'react-google-button';
 
-export const Login = () => {
-    const [email, setEmail] = useState<any | string>('')
-    const [password, setPassword] = useState<any | string>('')
+export const Signup = () => {
+    const [registerEmail, registerSetEmail] = useState<any | string>('')
+    const [registerPassword, registerSetPassword] = useState<any | string>('')
+    const [confirmPassword, confirmSetPassword] = useState<any | string>('')
+
     const inputRef = useRef<any>();
 
     console.log(auth?.currentUser?.email)
@@ -27,30 +28,24 @@ export const Login = () => {
     useEffect(() => {
         inputRef.current.focus()
     }, [])
-    const signIn = async () => {
-        
+    const Signup = async () => {
+        if(confirmPassword === registerPassword)
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            navigate('booking')
+            await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+            navigate('/')
         }
         catch (err) {
-            console.error('email not registered')
+            console.log('error')
         }
+
+    
     }
-    const signInWithGoogle = async () => {
-        try {
-            await signInWithPopup(auth, googleProvider)
-            navigate('booking')
-        }
-        catch (err) {
-            console.error(err)
-        }
-    }
+    
 
     const navigate = useNavigate()
 
     return (
-        <Container className='login' component="main"  >
+        <Container className='Signup' component="main"  >
             <Box
                 sx={{
                     marginTop: 8,
@@ -64,18 +59,26 @@ export const Login = () => {
                     <Grid margin={4}>
                         <Stack spacing={4} width='360px' >
                             <Stack >
-                                <Typography variant='h5' color='primary'>LogIn</Typography>
+                                <Typography variant='h5' color='primary'>Add your credential</Typography>
                             </Stack>
                             <Stack spacing={2}>
                                 <TextField color='primary' label='Email' size='medium'
-                                    ref={inputRef} placeholder='email' onChange={(e) => setEmail(e.target.value)} required
+                                    ref={inputRef} placeholder='email' onChange={(e) => registerSetEmail(e.target.value)} required
                                     InputProps={{
                                         endAdornment: <InputAdornment position='end'>{<EmailIcon />}</InputAdornment>
                                     }}
                                 >
                                 </TextField>
                                 <TextField label='Password'
-                                    ref={inputRef} placeholder='password' type='password' onChange={(e) => setPassword(e.target.value)} required
+                                    ref={inputRef} placeholder='password' type='password' onChange={(e) => registerSetPassword(e.target.value)} required
+                                    color='primary'
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position='end'>{<LockIcon />}</InputAdornment>
+                                    }}
+                                >
+                                </TextField>
+                                <TextField label='confirmPassword'
+                                    ref={inputRef} placeholder='Confirm Password' type='password' onChange={(e) => confirmSetPassword(e.target.value)} required
                                     color='primary'
                                     InputProps={{
                                         endAdornment: <InputAdornment position='end'>{<LockIcon />}</InputAdornment>
@@ -86,15 +89,10 @@ export const Login = () => {
                             <Stack direction='row' spacing={2}>
                                 <FormControlLabel control={<Checkbox value='Remember me' />} label='Remember me' />
                             </Stack>
-                            <Stack sx={{ dispaly: 'block', justifyContent: 'space-between',width:'100%' }}>
-                                <Button variant='contained' sx={{ margin: '5px' }} onClick={signIn}>Login</Button>
-                                <GoogleButton  className='GoogleButton' style={{width:'100%',margin:'5px',padding:'0'}}   onClick={signInWithGoogle}></GoogleButton>
-                               
-                                <p>Dont have an Account ? </p>
-                                
-                                <Button variant='contained' color='secondary' sx={{ margin: '5px' }} onClick={() => navigate('signup')}> Sign up </Button>
+                            <Stack sx={{ dispaly: 'block', justifyContent: 'space-between' }}>
+                                <Button variant='contained' sx={{ margin: '5px' }} onClick={Signup}>Sign up</Button>
                             </Stack>
-
+                         
                         </Stack>
                     </Grid>
                 </Paper>
@@ -103,4 +101,4 @@ export const Login = () => {
     )
 }
 
-export default Login
+export default Signup

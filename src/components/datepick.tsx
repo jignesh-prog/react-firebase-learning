@@ -10,7 +10,7 @@ export const BasicDateTimePicker = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DateTimePicker']}>
-        <DateTimePicker label="Choose Date & Time"  value={dateAndTime}  onChange={(newValue) => setDateAndTime(newValue)} />
+        <DateTimePicker label="Date & Time"  value={dateAndTime}  onChange={(newValue) => setDateAndTime(newValue)} />
       </DemoContainer>
     </LocalizationProvider>
   );
